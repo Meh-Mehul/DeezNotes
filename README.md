@@ -11,3 +11,6 @@ A Notes App made with Express, MongoDB, EJS and custom Authentication using JWT.
 #### Further Dev
 I want to add pagination in the ```Home``` and ```Notes``` Routes (might add later), Also wanna add good looking custom errror pages (I suck at UI) and maybe even use express-flash for flashing messages.
 Also, i might remake this whole EJS frontend in React one day ;}.
+
+
+P.S. Maybe one or two routes might be broken as i've not tested each and every case at each and every route (there were a lot :( ).
