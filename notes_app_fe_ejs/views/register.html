@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+        .container h2 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-group .error {
+            color: red;
+            font-size: 0.9em;
+        }
+        .form-group .success {
+            color: green;
+            font-size: 0.9em;
+        }
+        .form-group button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Register</h2>
+        <div id="message"></div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+            <div id="nameError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <div id="emailError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" minlength="2" required>
+            <div id="passwordError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <button type="button" onclick="register()">Register</button>
+        </div>
+    </div>
+    <script>
+        async function register() {
+            // Clear previous messages
+            document.getElementById('message').innerHTML = '';
+            document.getElementById('nameError').innerText = '';
+            document.getElementById('emailError').innerText = '';
+            document.getElementById('passwordError').innerText = '';
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            let valid = true;
+
+            if (name.trim() === '') {
+                document.getElementById('nameError').innerText = 'Name is required';
+                valid = false;
+            }
+
+            if (email.trim() === '') {
+                document.getElementById('emailError').innerText = 'Email is required';
+                valid = false;
+            }
+
+            if (password.length < 2) {
+                document.getElementById('passwordError').innerText = 'Password must be at least 2 characters long';
+                valid = false;
+            }
+
+            if (!valid) {
+                return;
+            }
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, email, password }),
+                });
+
+                const result = await response.json();
+                console.log(result)
+                if (response.ok) {
+                    if(result.message){
+                        document.getElementById('message').innerHTML = `<div class="success">${result.message}</div>`;
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1000);
+                    }
+                    else{
+                        document.getElementById('message').innerHTML = `<div class="error"> Some Error Occured Could Not register</div>`;
+
+                    }
+
+                } else {
+                    console.log(result.message);
+                    document.getElementById('message').innerHTML = `<div class="error">${result.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('message').innerHTML = `<div class="error">An error occurred: ${error.message}</div>`;
+            }
+        }
+    </script>
+</body>
+</html>
