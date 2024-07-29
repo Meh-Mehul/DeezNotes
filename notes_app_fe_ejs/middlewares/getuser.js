@@ -1,5 +1,5 @@
 const axios = require('axios');
-
+backendApiUrl = 'http://127.0.0.1:5000';
 const getUser = (req, res, next)=>{
     if(req.cookies.jwt){
         let config = {
